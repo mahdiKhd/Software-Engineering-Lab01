@@ -25,6 +25,7 @@ function App() {
         id: Date.now(),
         text: inputValue.trim(),
         completed: false,
+        priority: 'medium', // 'high', 'medium', 'low'
         createdAt: new Date().toLocaleDateString('fa-IR')
       };
       setTodos([...todos, newTodo]);
@@ -48,6 +49,12 @@ function App() {
     ));
   };
 
+  const changePriority = (id, newPriority) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, priority: newPriority } : todo
+    ));
+  };
+
   const clearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
@@ -59,14 +66,27 @@ function App() {
   };
 
   const getFilteredTodos = () => {
+    let filtered;
     switch (filter) {
       case 'active':
-        return todos.filter(todo => !todo.completed);
+        filtered = todos.filter(todo => !todo.completed);
+        break;
       case 'completed':
-        return todos.filter(todo => todo.completed);
+        filtered = todos.filter(todo => todo.completed);
+        break;
       default:
-        return todos;
+        filtered = todos;
     }
+    
+    // Sort by priority and completion status
+    return filtered.sort((a, b) => {
+      if (a.completed !== b.completed) {
+        return a.completed - b.completed; // Completed items go to bottom
+      }
+      
+      const priorityOrder = { high: 3, medium: 2, low: 1 };
+      return priorityOrder[b.priority] - priorityOrder[a.priority];
+    });
   };
 
   const completedCount = todos.filter(todo => todo.completed).length;
@@ -148,6 +168,7 @@ function App() {
                   onToggle={toggleTodo}
                   onDelete={deleteTodo}
                   onEdit={editTodo}
+                  onPriorityChange={changePriority}
                 />
               ))
             )}

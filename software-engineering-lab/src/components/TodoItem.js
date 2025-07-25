@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
+const TodoItem = ({ todo, onToggle, onDelete, onEdit, onPriorityChange }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
 
@@ -24,8 +24,33 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
     }
   };
 
+  const getPriorityIcon = (priority) => {
+    switch (priority) {
+      case 'high': return '🔴';
+      case 'medium': return '🟡';
+      case 'low': return '🟢';
+      default: return '🟡';
+    }
+  };
+
+  const getPriorityText = (priority) => {
+    switch (priority) {
+      case 'high': return 'بالا';
+      case 'medium': return 'متوسط';
+      case 'low': return 'پایین';
+      default: return 'متوسط';
+    }
+  };
+
+  const cyclePriority = () => {
+    const priorities = ['low', 'medium', 'high'];
+    const currentIndex = priorities.indexOf(todo.priority);
+    const nextIndex = (currentIndex + 1) % priorities.length;
+    onPriorityChange(todo.id, priorities[nextIndex]);
+  };
+
   return (
-    <div className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+    <div className={`todo-item ${todo.completed ? 'completed' : ''} priority-${todo.priority}`}>
       <div className="todo-content">
         {isEditing ? (
           <input
@@ -42,7 +67,12 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit }) => {
             {todo.text}
           </span>
         )}
-        <small className="todo-date">ایجاد شده در: {todo.createdAt}</small>
+        <div className="todo-meta">
+          <small className="todo-date">ایجاد شده در: {todo.createdAt}</small>
+          <span className="priority-badge" onClick={cyclePriority} title="کلیک برای تغییر اولویت">
+            {getPriorityIcon(todo.priority)} {getPriorityText(todo.priority)}
+          </span>
+        </div>
       </div>
       <div className="todo-actions">
         {isEditing ? (
