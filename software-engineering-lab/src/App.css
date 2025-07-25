@@ -789,3 +789,235 @@ body {
   background: rgba(255, 255, 255, 0.1);
   color: inherit;
 }
+
+/* Responsive Design Improvements */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 1.5rem 1rem;
+  }
+  
+  .app-header h1 {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  
+  .app-header p {
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .header-controls {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  
+  .dark-mode-toggle,
+  .export-button,
+  .import-button,
+  .stats-button {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3rem;
+  }
+  
+  .todo-container {
+    padding: 1.5rem;
+    margin: 1rem;
+    max-width: none;
+  }
+  
+  .input-section {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .todo-input {
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+  
+  .add-button {
+    padding: 0.8rem 1.5rem;
+    width: 100%;
+    font-size: 1rem;
+  }
+  
+  .filter-section {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  
+  .filter-button,
+  .clear-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .todo-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .todo-content {
+    order: 1;
+  }
+  
+  .todo-actions {
+    order: 2;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+  
+  .toggle-button,
+  .edit-button,
+  .delete-button,
+  .save-button,
+  .cancel-button {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+  }
+  
+  .stat-card {
+    padding: 0.8rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .stats-dashboard {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .priority-breakdown {
+    gap: 0.6rem;
+  }
+  
+  .priority-item {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .app-header p {
+    font-size: 0.9rem;
+  }
+  
+  .combined-notice {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+  
+  .header-controls {
+    justify-content: center;
+  }
+  
+  .stats {
+    font-size: 0.9rem;
+  }
+  
+  .todo-container {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-section {
+    justify-content: center;
+  }
+  
+  .filter-button {
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+  }
+  
+  .clear-button {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-right: 0;
+  }
+  
+  .todo-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  
+  .priority-badge {
+    align-self: flex-start;
+  }
+}
+
+@media (min-width: 1200px) {
+  .todo-container {
+    max-width: 800px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .app-header h1 {
+    font-size: 3rem;
+  }
+  
+  .app-header p {
+    font-size: 1.3rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+  }
+  
+  .app-header {
+    background: #f8fafc !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+  
+  .header-controls,
+  .combined-notice,
+  .filter-section,
+  .search-section,
+  .input-section {
+    display: none !important;
+  }
+  
+  .todo-item {
+    border: 1px solid #e2e8f0 !important;
+    background: white !important;
+    color: black !important;
+    break-inside: avoid;
+  }
+  
+  .todo-actions {
+    display: none !important;
+  }
+  
+  .stats-dashboard {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+}
