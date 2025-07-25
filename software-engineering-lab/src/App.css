@@ -492,9 +492,12 @@ body {
   margin-top: 1rem;
   display: flex;
   justify-content: center;
+  gap: 1rem;
 }
 
-.dark-mode-toggle {
+.dark-mode-toggle,
+.export-button,
+.import-button {
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
@@ -508,9 +511,29 @@ body {
   transition: all 0.3s ease;
 }
 
-.dark-mode-toggle:hover {
+.dark-mode-toggle:hover,
+.export-button:hover,
+.import-button:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: scale(1.1);
+}
+
+.export-button {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.export-button:hover {
+  background: rgba(34, 197, 94, 0.3);
+}
+
+.import-button {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.import-button:hover {
+  background: rgba(59, 130, 246, 0.3);
 }
 
 /* Dark Mode Styles */

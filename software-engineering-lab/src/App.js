@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TodoItem from './components/TodoItem';
-import { loadTodos, saveTodos } from './utils/storage';
+import { loadTodos, saveTodos, exportTodos, importTodos } from './utils/storage';
 import './App.css';
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
   const [searchTerm, setSearchTerm] = useState('');
   const [darkMode, setDarkMode] = useState(false);
+  const fileInputRef = useRef(null);
 
   // Load todos from localStorage on component mount
   useEffect(() => {
@@ -119,6 +120,39 @@ function App() {
   const totalCount = todos.length;
   const filteredTodos = getFilteredTodos();
 
+  const handleExport = () => {
+    const success = exportTodos(todos);
+    if (success) {
+      alert('وظایف با موفقیت صادر شدند!');
+    } else {
+      alert('خطا در صادر کردن وظایف');
+    }
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const importedTodos = await importTodos(file);
+        const confirmation = window.confirm(
+          `آیا می‌خواهید ${importedTodos.length} وظیفه را وارد کنید؟ این عمل وظایف فعلی را جایگزین می‌کند.`
+        );
+        if (confirmation) {
+          setTodos(importedTodos);
+          alert('وظایف با موفقیت وارد شدند!');
+        }
+      } catch (error) {
+        alert(error.message);
+      }
+      // Reset file input
+      e.target.value = '';
+    }
+  };
+
   return (
     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       <header className="app-header">
@@ -135,6 +169,23 @@ function App() {
           >
             {darkMode ? '☀️' : '🌙'}
           </button>
+          {todos.length > 0 && (
+            <>
+              <button onClick={handleExport} className="export-button" title="صادر کردن وظایف">
+                📤
+              </button>
+              <button onClick={handleImportClick} className="import-button" title="وارد کردن وظایف">
+                📥
+              </button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept=".json"
+                style={{ display: 'none' }}
+              />
+            </>
+          )}
         </div>
         {totalCount > 0 && (
           <div className="stats">
