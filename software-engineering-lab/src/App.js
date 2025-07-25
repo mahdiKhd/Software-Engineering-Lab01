@@ -8,17 +8,34 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
   const [searchTerm, setSearchTerm] = useState('');
+  const [darkMode, setDarkMode] = useState(false);
 
   // Load todos from localStorage on component mount
   useEffect(() => {
     const savedTodos = loadTodos();
     setTodos(savedTodos);
+    
+    // Load dark mode preference
+    const savedDarkMode = localStorage.getItem('darkMode');
+    if (savedDarkMode) {
+      setDarkMode(JSON.parse(savedDarkMode));
+    }
   }, []);
 
   // Save todos to localStorage whenever todos change
   useEffect(() => {
     saveTodos(todos);
   }, [todos]);
+
+  // Save dark mode preference
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
 
   const addTodo = () => {
     if (inputValue.trim() !== '') {
@@ -103,12 +120,21 @@ function App() {
   const filteredTodos = getFilteredTodos();
 
   return (
-    <div className="App">
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       <header className="app-header">
         <h1>🔧✨ مدیریت وظایف پیشرفته - نسخه اضطراری</h1>
         <p>برنامه مدیریت وظایف شخصی - با ذخیره‌سازی خودکار - پریمیوم و بهبود یافته</p>
         <div className="combined-notice">
           🌟 نسخه پریمیوم با رفع باگ‌های فوری ⚠️
+        </div>
+        <div className="header-controls">
+          <button 
+            onClick={() => setDarkMode(!darkMode)}
+            className="dark-mode-toggle"
+            title={darkMode ? 'حالت روشن' : 'حالت تاریک'}
+          >
+            {darkMode ? '☀️' : '🌙'}
+          </button>
         </div>
         {totalCount > 0 && (
           <div className="stats">

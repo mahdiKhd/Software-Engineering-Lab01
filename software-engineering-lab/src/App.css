@@ -487,3 +487,86 @@ body {
   background: rgba(16, 185, 129, 0.1);
   color: #10b981;
 }
+
+.header-controls {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.dark-mode-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Dark Mode Styles */
+.dark-mode {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
+}
+
+.dark-mode .todo-container {
+  background: rgba(40, 40, 55, 0.95);
+  color: #e2e8f0;
+}
+
+.dark-mode .todo-input,
+.dark-mode .search-input,
+.dark-mode .edit-input {
+  background: #2d3748;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.dark-mode .todo-input:focus,
+.dark-mode .search-input:focus,
+.dark-mode .edit-input:focus {
+  border-color: #667eea;
+  background: #374151;
+}
+
+.dark-mode .todo-item {
+  background: #374151;
+  color: #e2e8f0;
+}
+
+.dark-mode .todo-item.completed {
+  background: #2d3748;
+}
+
+.dark-mode .filter-button {
+  background: #374151;
+  border-color: #4a5568;
+  color: #e2e8f0;
+}
+
+.dark-mode .filter-button.active {
+  background: #667eea;
+  color: white;
+}
+
+.dark-mode .empty-message {
+  color: #cbd5e0;
+}
+
+.dark-mode .todo-text:hover {
+  color: #a78bfa;
+}
+
+.dark-mode .priority-badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
