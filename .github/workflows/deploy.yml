@@ -1,0 +1,40 @@
+name: Deploy React App to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'software-engineering-lab/package-lock.json'
+        
+    - name: Install dependencies
+      working-directory: ./software-engineering-lab
+      run: npm ci
+      
+    - name: Build project
+      working-directory: ./software-engineering-lab
+      run: npm run build
+      env:
+        PUBLIC_URL: /Software-Engineering-Lab01
+        
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./software-engineering-lab/build
+        cname: false
