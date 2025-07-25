@@ -3,8 +3,10 @@ import TodoItem from './components/TodoItem';
 import StatsDashboard from './components/StatsDashboard';
 import { loadTodos, saveTodos, exportTodos, importTodos } from './utils/storage';
 import './App.css';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+  const { t, i18n } = useTranslation();
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
@@ -185,6 +187,10 @@ function App() {
     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       <header className="app-header">
         <h1>🔧✨ مدیریت وظایف پیشرفته - نسخه اضطراری</h1>
+        <div className="lang-switcher">
+          <button onClick={() => i18n.changeLanguage('fa')}>FA</button>
+          <button onClick={() => i18n.changeLanguage('en')}>EN</button>
+        </div>
         <p>برنامه مدیریت وظایف شخصی - با ذخیره‌سازی خودکار - پریمیوم و بهبود یافته</p>
         <div className="combined-notice">
           🌟 نسخه پریمیوم با رفع باگ‌های فوری ⚠️
@@ -243,7 +249,7 @@ function App() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="وظیفه جدید اضافه کنید..."
+              placeholder={t('Add a new todo...')}
               className="todo-input"
             />
             <input
@@ -251,9 +257,9 @@ function App() {
               value={dueDate}
               onChange={e => setDueDate(e.target.value)}
               className="due-date-input"
-              placeholder="تاریخ سررسید"
+              placeholder={t('Due')}
             />
-            <button onClick={addTodo} className="add-button">افزودن</button>
+            <button onClick={addTodo} className="add-button">{t('Add')}</button>
           </div>
 
           {totalCount > 0 && (
@@ -263,7 +269,7 @@ function App() {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="جستجو در وظایف..."
+                  placeholder={t('Search todos...')}
                   className="search-input"
                 />
               </div>
@@ -273,23 +279,23 @@ function App() {
                   onClick={() => setFilter('all')}
                   className={`filter-button ${filter === 'all' ? 'active' : ''}`}
                 >
-                  همه ({totalCount})
+                  {t('All')} ({totalCount})
                 </button>
                 <button 
                   onClick={() => setFilter('active')}
                   className={`filter-button ${filter === 'active' ? 'active' : ''}`}
                 >
-                  فعال ({activeCount})
+                  {t('Active')} ({activeCount})
                 </button>
                 <button 
                   onClick={() => setFilter('completed')}
                   className={`filter-button ${filter === 'completed' ? 'active' : ''}`}
                 >
-                  تکمیل شده ({completedCount})
+                  {t('Completed')} ({completedCount})
                 </button>
                 {completedCount > 0 && (
                   <button onClick={clearCompleted} className="clear-button">
-                    پاک کردن تکمیل شده‌ها
+                    {t('Clear completed')}
                   </button>
                 )}
               </div>

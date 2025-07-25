@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const TodoItem = ({ todo, onToggle, onDelete, onEdit, onPriorityChange }) => {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const [editDueDate, setEditDueDate] = useState(todo.dueDate || '');
@@ -88,12 +90,12 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit, onPriorityChange }) => {
           </span>
         )}
         <div className="todo-meta">
-          <small className="todo-date">ایجاد شده در: {todo.createdAt}</small>
+          <small className="todo-date">{t('Created at')}: {todo.createdAt}</small>
           {todo.dueDate && (
-            <small className="todo-due-date">سررسید: {todo.dueDate}</small>
+            <small className="todo-due-date">{t('Due')}: {todo.dueDate}</small>
           )}
           {isOverdue() && (
-            <span className="overdue-badge">سررسید گذشته!</span>
+            <span className="overdue-badge">{t('Overdue!')}</span>
           )}
           <span className="priority-badge" onClick={cyclePriority} title="کلیک برای تغییر اولویت">
             {getPriorityIcon(todo.priority)} {getPriorityText(todo.priority)}
