@@ -569,6 +569,25 @@ body {
   background: rgba(59, 130, 246, 0.3);
 }
 
+.undo-button, .redo-button {
+  background: #f3f4f6;
+  border: none;
+  color: #374151;
+  font-size: 1.2em;
+  margin: 0 4px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.undo-button:disabled, .redo-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.undo-button:hover:not(:disabled), .redo-button:hover:not(:disabled) {
+  background: #e0e7ef;
+}
+
 /* Statistics Dashboard */
 .stats-dashboard {
   background: rgba(255, 255, 255, 0.98);

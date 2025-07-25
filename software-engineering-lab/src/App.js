@@ -67,8 +67,33 @@ function App() {
     }
   }, [darkMode]);
 
+  const [history, setHistory] = useState([]);
+  const [future, setFuture] = useState([]);
+
+  const pushToHistory = (newTodos) => {
+    setHistory(prev => [...prev, todos]);
+    setFuture([]);
+  };
+
+  const undo = () => {
+    if (history.length === 0) return;
+    const prevTodos = history[history.length - 1];
+    setHistory(history.slice(0, -1));
+    setFuture(f => [todos, ...f]);
+    setTodos(prevTodos);
+  };
+
+  const redo = () => {
+    if (future.length === 0) return;
+    const nextTodos = future[0];
+    setFuture(future.slice(1));
+    setHistory(h => [...h, todos]);
+    setTodos(nextTodos);
+  };
+
   const addTodo = () => {
     if (inputValue.trim() !== '') {
+      pushToHistory();
       const newTodo = {
         id: Date.now(),
         text: inputValue.trim(),
@@ -84,28 +109,33 @@ function App() {
   };
 
   const toggleTodo = (id) => {
+    pushToHistory();
     setTodos(todos.map(todo => 
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     ));
   };
 
   const deleteTodo = (id) => {
+    pushToHistory();
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
   const editTodo = (id, newText, newDueDate) => {
+    pushToHistory();
     setTodos(todos.map(todo =>
       todo.id === id ? { ...todo, text: newText, dueDate: newDueDate !== undefined ? newDueDate : todo.dueDate } : todo
     ));
   };
 
   const changePriority = (id, newPriority) => {
+    pushToHistory();
     setTodos(todos.map(todo =>
       todo.id === id ? { ...todo, priority: newPriority } : todo
     ));
   };
 
   const clearCompleted = () => {
+    pushToHistory();
     setTodos(todos.filter(todo => !todo.completed));
   };
 
@@ -225,6 +255,8 @@ function App() {
           🌟 نسخه پریمیوم با رفع باگ‌های فوری ⚠️
         </div>
         <div className="header-controls">
+          <button onClick={undo} className="undo-button" disabled={history.length === 0} title="Undo">↩️</button>
+          <button onClick={redo} className="redo-button" disabled={future.length === 0} title="Redo">↪️</button>
           <button 
             onClick={() => setDarkMode(!darkMode)}
             className="dark-mode-toggle"
