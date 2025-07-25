@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoItem from './components/TodoItem';
+import { loadTodos, saveTodos } from './utils/storage';
 import './App.css';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
+
+  // Load todos from localStorage on component mount
+  useEffect(() => {
+    const savedTodos = loadTodos();
+    setTodos(savedTodos);
+  }, []);
+
+  // Save todos to localStorage whenever todos change
+  useEffect(() => {
+    saveTodos(todos);
+  }, [todos]);
 
   const addTodo = () => {
     if (inputValue.trim() !== '') {
@@ -60,7 +72,7 @@ function App() {
     <div className="App">
       <header className="app-header">
         <h1>مدیریت وظایف</h1>
-        <p>برنامه مدیریت وظایف شخصی</p>
+        <p>برنامه مدیریت وظایف شخصی - با ذخیره‌سازی خودکار</p>
         {totalCount > 0 && (
           <div className="stats">
             <span>کل: {totalCount} | فعال: {activeCount} | تکمیل شده: {completedCount}</span>
