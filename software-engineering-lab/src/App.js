@@ -14,6 +14,29 @@ function App() {
   const fileInputRef = useRef(null);
   const [dueDate, setDueDate] = useState('');
 
+  // Drag and drop state
+  const [draggedTodoId, setDraggedTodoId] = useState(null);
+
+  const handleDragStart = (id) => {
+    setDraggedTodoId(id);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (id) => {
+    if (draggedTodoId === null || draggedTodoId === id) return;
+    const draggedIndex = todos.findIndex(todo => todo.id === draggedTodoId);
+    const dropIndex = todos.findIndex(todo => todo.id === id);
+    if (draggedIndex === -1 || dropIndex === -1) return;
+    const updatedTodos = [...todos];
+    const [removed] = updatedTodos.splice(draggedIndex, 1);
+    updatedTodos.splice(dropIndex, 0, removed);
+    setTodos(updatedTodos);
+    setDraggedTodoId(null);
+  };
+
   // Load todos from localStorage on component mount
   useEffect(() => {
     const savedTodos = loadTodos();
@@ -286,14 +309,21 @@ function App() {
               </p>
             ) : (
               filteredTodos.map((todo) => (
-                <TodoItem 
-                  key={todo.id} 
-                  todo={todo} 
-                  onToggle={toggleTodo}
-                  onDelete={deleteTodo}
-                  onEdit={(id, newText, newDueDate) => editTodo(id, newText, newDueDate)}
-                  onPriorityChange={changePriority}
-                />
+                <div
+                  key={todo.id}
+                  draggable
+                  onDragStart={() => handleDragStart(todo.id)}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDrop(todo.id)}
+                >
+                  <TodoItem 
+                    todo={todo} 
+                    onToggle={toggleTodo}
+                    onDelete={deleteTodo}
+                    onEdit={(id, newText, newDueDate) => editTodo(id, newText, newDueDate)}
+                    onPriorityChange={changePriority}
+                  />
+                </div>
               ))
             )}
           </div>

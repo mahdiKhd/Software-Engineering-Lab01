@@ -463,6 +463,13 @@ body {
   box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
 }
 
+.todo-item[draggable="true"] {
+  cursor: grab;
+}
+.todo-item[draggable="true"]:active {
+  cursor: grabbing;
+}
+
 .todo-meta {
   display: flex;
   justify-content: space-between;
