@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import TodoItem from './components/TodoItem';
+import StatsDashboard from './components/StatsDashboard';
 import { loadTodos, saveTodos, exportTodos, importTodos } from './utils/storage';
 import './App.css';
 
@@ -9,6 +10,7 @@ function App() {
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
   const [searchTerm, setSearchTerm] = useState('');
   const [darkMode, setDarkMode] = useState(false);
+  const [showStats, setShowStats] = useState(false);
   const fileInputRef = useRef(null);
 
   // Load todos from localStorage on component mount
@@ -171,6 +173,13 @@ function App() {
           </button>
           {todos.length > 0 && (
             <>
+              <button 
+                onClick={() => setShowStats(!showStats)}
+                className="stats-button" 
+                title={showStats ? 'مخفی کردن آمار' : 'نمایش آمار'}
+              >
+                📊
+              </button>
               <button onClick={handleExport} className="export-button" title="صادر کردن وظایف">
                 📤
               </button>
@@ -193,8 +202,15 @@ function App() {
           </div>
         )}
       </header>
+      
       <main className="app-main">
         <div className="todo-container">
+          <StatsDashboard 
+            todos={todos} 
+            isVisible={showStats} 
+            onToggle={() => setShowStats(false)} 
+          />
+          
           <div className="input-section">
             <input 
               type="text" 
