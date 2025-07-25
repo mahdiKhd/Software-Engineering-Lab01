@@ -51,8 +51,18 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit, onPriorityChange }) => {
     onPriorityChange(todo.id, priorities[nextIndex]);
   };
 
+  const isOverdue = () => {
+    if (!todo.dueDate || todo.completed) return false;
+    const today = new Date();
+    const due = new Date(todo.dueDate);
+    // Ignore time part for comparison
+    today.setHours(0,0,0,0);
+    due.setHours(0,0,0,0);
+    return due < today;
+  };
+
   return (
-    <div className={`todo-item ${todo.completed ? 'completed' : ''} priority-${todo.priority}`}>
+    <div className={`todo-item ${todo.completed ? 'completed' : ''} priority-${todo.priority}${isOverdue() ? ' overdue' : ''}`}>
       <div className="todo-content">
         {isEditing ? (
           <>
@@ -81,6 +91,9 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit, onPriorityChange }) => {
           <small className="todo-date">ایجاد شده در: {todo.createdAt}</small>
           {todo.dueDate && (
             <small className="todo-due-date">سررسید: {todo.dueDate}</small>
+          )}
+          {isOverdue() && (
+            <span className="overdue-badge">سررسید گذشته!</span>
           )}
           <span className="priority-badge" onClick={cyclePriority} title="کلیک برای تغییر اولویت">
             {getPriorityIcon(todo.priority)} {getPriorityText(todo.priority)}
