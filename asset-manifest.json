@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/Software-Engineering-Lab01/static/css/main.49d19422.css",
+    "main.js": "/Software-Engineering-Lab01/static/js/main.c212e27a.js",
+    "static/js/694.0de050e0.chunk.js": "/Software-Engineering-Lab01/static/js/694.0de050e0.chunk.js",
+    "static/js/208.f6ea9b25.chunk.js": "/Software-Engineering-Lab01/static/js/208.f6ea9b25.chunk.js",
+    "static/js/453.047d77f8.chunk.js": "/Software-Engineering-Lab01/static/js/453.047d77f8.chunk.js",
+    "index.html": "/Software-Engineering-Lab01/index.html",
+    "main.49d19422.css.map": "/Software-Engineering-Lab01/static/css/main.49d19422.css.map",
+    "main.c212e27a.js.map": "/Software-Engineering-Lab01/static/js/main.c212e27a.js.map",
+    "694.0de050e0.chunk.js.map": "/Software-Engineering-Lab01/static/js/694.0de050e0.chunk.js.map",
+    "208.f6ea9b25.chunk.js.map": "/Software-Engineering-Lab01/static/js/208.f6ea9b25.chunk.js.map",
+    "453.047d77f8.chunk.js.map": "/Software-Engineering-Lab01/static/js/453.047d77f8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.49d19422.css",
+    "static/js/main.c212e27a.js"
+  ]
+}
