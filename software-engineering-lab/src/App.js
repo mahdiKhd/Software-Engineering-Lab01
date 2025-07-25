@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import TodoItem from './components/TodoItem';
-import StatsDashboard from './components/StatsDashboard';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { loadTodos, saveTodos, exportTodos, importTodos } from './utils/storage';
 import './App.css';
 import { useTranslation } from 'react-i18next';
 import Joyride from 'react-joyride';
+
+const TodoItem = lazy(() => import('./components/TodoItem'));
+const StatsDashboard = lazy(() => import('./components/StatsDashboard'));
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -298,11 +299,13 @@ function App() {
       
       <main className="app-main">
         <div className="todo-container">
-          <StatsDashboard 
-            todos={todos} 
-            isVisible={showStats} 
-            onToggle={() => setShowStats(false)} 
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <StatsDashboard 
+              todos={todos} 
+              isVisible={showStats} 
+              onToggle={() => setShowStats(false)} 
+            />
+          </Suspense>
           
           <div className="input-section">
             <input 
@@ -391,13 +394,15 @@ function App() {
                   onDragOver={handleDragOver}
                   onDrop={() => handleDrop(todo.id)}
                 >
-                  <TodoItem 
-                    todo={todo} 
-                    onToggle={toggleTodo}
-                    onDelete={deleteTodo}
-                    onEdit={(id, newText, newDueDate) => editTodo(id, newText, newDueDate)}
-                    onPriorityChange={changePriority}
-                  />
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <TodoItem 
+                      todo={todo} 
+                      onToggle={toggleTodo}
+                      onDelete={deleteTodo}
+                      onEdit={(id, newText, newDueDate) => editTodo(id, newText, newDueDate)}
+                      onPriorityChange={changePriority}
+                    />
+                  </Suspense>
                 </div>
               ))
             )}
