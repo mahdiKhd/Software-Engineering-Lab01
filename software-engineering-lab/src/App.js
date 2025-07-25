@@ -42,6 +42,12 @@ function App() {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
+  const editTodo = (id, newText) => {
+    setTodos(todos.map(todo =>
+      todo.id === id ? { ...todo, text: newText } : todo
+    ));
+  };
+
   const clearCompleted = () => {
     setTodos(todos.filter(todo => !todo.completed));
   };
@@ -141,6 +147,7 @@ function App() {
                   todo={todo} 
                   onToggle={toggleTodo}
                   onDelete={deleteTodo}
+                  onEdit={editTodo}
                 />
               ))
             )}
