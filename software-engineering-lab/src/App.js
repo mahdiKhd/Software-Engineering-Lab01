@@ -12,6 +12,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const fileInputRef = useRef(null);
+  const [dueDate, setDueDate] = useState('');
 
   // Load todos from localStorage on component mount
   useEffect(() => {
@@ -47,10 +48,12 @@ function App() {
         text: inputValue.trim(),
         completed: false,
         priority: 'medium', // 'high', 'medium', 'low'
-        createdAt: new Date().toLocaleDateString('fa-IR')
+        createdAt: new Date().toLocaleDateString('fa-IR'),
+        dueDate: dueDate || null
       };
       setTodos([...todos, newTodo]);
       setInputValue('');
+      setDueDate('');
     }
   };
 
@@ -64,9 +67,9 @@ function App() {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
-  const editTodo = (id, newText) => {
+  const editTodo = (id, newText, newDueDate) => {
     setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, text: newText } : todo
+      todo.id === id ? { ...todo, text: newText, dueDate: newDueDate !== undefined ? newDueDate : todo.dueDate } : todo
     ));
   };
 
@@ -220,6 +223,13 @@ function App() {
               placeholder="وظیفه جدید اضافه کنید..."
               className="todo-input"
             />
+            <input
+              type="date"
+              value={dueDate}
+              onChange={e => setDueDate(e.target.value)}
+              className="due-date-input"
+              placeholder="تاریخ سررسید"
+            />
             <button onClick={addTodo} className="add-button">افزودن</button>
           </div>
 
@@ -281,7 +291,7 @@ function App() {
                   todo={todo} 
                   onToggle={toggleTodo}
                   onDelete={deleteTodo}
-                  onEdit={editTodo}
+                  onEdit={(id, newText, newDueDate) => editTodo(id, newText, newDueDate)}
                   onPriorityChange={changePriority}
                 />
               ))

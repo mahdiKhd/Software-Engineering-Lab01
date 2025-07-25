@@ -3,16 +3,18 @@ import React, { useState } from 'react';
 const TodoItem = ({ todo, onToggle, onDelete, onEdit, onPriorityChange }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
+  const [editDueDate, setEditDueDate] = useState(todo.dueDate || '');
 
   const handleSave = () => {
     if (editText.trim() !== '') {
-      onEdit(todo.id, editText.trim());
+      onEdit(todo.id, editText.trim(), editDueDate);
       setIsEditing(false);
     }
   };
 
   const handleCancel = () => {
     setEditText(todo.text);
+    setEditDueDate(todo.dueDate || '');
     setIsEditing(false);
   };
 
@@ -53,15 +55,23 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit, onPriorityChange }) => {
     <div className={`todo-item ${todo.completed ? 'completed' : ''} priority-${todo.priority}`}>
       <div className="todo-content">
         {isEditing ? (
-          <input
-            type="text"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            onBlur={handleCancel}
-            className="edit-input"
-            autoFocus
-          />
+          <>
+            <input
+              type="text"
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              onKeyPress={handleKeyPress}
+              onBlur={handleCancel}
+              className="edit-input"
+              autoFocus
+            />
+            <input
+              type="date"
+              value={editDueDate}
+              onChange={e => setEditDueDate(e.target.value)}
+              className="edit-due-date-input"
+            />
+          </>
         ) : (
           <span className="todo-text" onDoubleClick={() => setIsEditing(true)}>
             {todo.text}
@@ -69,6 +79,9 @@ const TodoItem = ({ todo, onToggle, onDelete, onEdit, onPriorityChange }) => {
         )}
         <div className="todo-meta">
           <small className="todo-date">ایجاد شده در: {todo.createdAt}</small>
+          {todo.dueDate && (
+            <small className="todo-due-date">سررسید: {todo.dueDate}</small>
+          )}
           <span className="priority-badge" onClick={cyclePriority} title="کلیک برای تغییر اولویت">
             {getPriorityIcon(todo.priority)} {getPriorityText(todo.priority)}
           </span>
