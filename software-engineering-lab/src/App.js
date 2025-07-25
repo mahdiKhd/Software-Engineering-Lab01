@@ -231,7 +231,7 @@ function App() {
   ];
 
   return (
-    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`} role="main" aria-label="Todo Application">
       <Joyride
         steps={tourSteps}
         run={runTour}
@@ -312,6 +312,7 @@ function App() {
               onKeyPress={handleKeyPress}
               placeholder={t('Add a new todo...')}
               className="todo-input"
+              aria-label={t('Add a new todo...')}
             />
             <input
               type="date"
@@ -319,8 +320,9 @@ function App() {
               onChange={e => setDueDate(e.target.value)}
               className="due-date-input"
               placeholder={t('Due')}
+              aria-label={t('Due')}
             />
-            <button onClick={addTodo} className="add-button">{t('Add')}</button>
+            <button onClick={addTodo} className="add-button" aria-label={t('Add')}>{t('Add')}</button>
           </div>
 
           {totalCount > 0 && (
@@ -335,27 +337,33 @@ function App() {
                 />
               </div>
               
-              <div className="filter-section">
+              <div className="filter-section" role="group" aria-label="Filter Todos">
                 <button 
                   onClick={() => setFilter('all')}
                   className={`filter-button ${filter === 'all' ? 'active' : ''}`}
+                  aria-pressed={filter === 'all'}
+                  tabIndex={0}
                 >
                   {t('All')} ({totalCount})
                 </button>
                 <button 
                   onClick={() => setFilter('active')}
                   className={`filter-button ${filter === 'active' ? 'active' : ''}`}
+                  aria-pressed={filter === 'active'}
+                  tabIndex={0}
                 >
                   {t('Active')} ({activeCount})
                 </button>
                 <button 
                   onClick={() => setFilter('completed')}
                   className={`filter-button ${filter === 'completed' ? 'active' : ''}`}
+                  aria-pressed={filter === 'completed'}
+                  tabIndex={0}
                 >
                   {t('Completed')} ({completedCount})
                 </button>
                 {completedCount > 0 && (
-                  <button onClick={clearCompleted} className="clear-button">
+                  <button onClick={clearCompleted} className="clear-button" aria-label={t('Clear completed')} tabIndex={0}>
                     {t('Clear completed')}
                   </button>
                 )}
