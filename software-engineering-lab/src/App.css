@@ -107,6 +107,55 @@ body {
   box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
 }
 
+.filter-section {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-button {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-button:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.filter-button.active {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.clear-button {
+  padding: 0.5rem 1rem;
+  background: #fee2e2;
+  border: 2px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: auto;
+}
+
+.clear-button:hover {
+  background: #fecaca;
+  border-color: #f87171;
+}
+
 .todos-list {
   min-height: 200px;
 }
