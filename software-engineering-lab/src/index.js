@@ -20,7 +20,15 @@ i18n.use(initReactI18next).init({
         'Created at': 'Created at',
         'Due': 'Due',
         'Overdue!': 'Overdue!',
-        'Search todos...': 'Search todos...'
+        'Search todos...': 'Search todos...',
+        'Add your first todo here!': 'Add your first todo here!',
+        'Filter your todos by status.': 'Filter your todos by status.',
+        'Switch between Persian and English.': 'Switch between Persian and English.',
+        'Back': 'Back',
+        'Close': 'Close',
+        'Finish': 'Finish',
+        'Next': 'Next',
+        'Skip': 'Skip'
       }
     },
     fa: {
@@ -34,7 +42,15 @@ i18n.use(initReactI18next).init({
         'Created at': 'ایجاد شده در',
         'Due': 'سررسید',
         'Overdue!': 'سررسید گذشته!',
-        'Search todos...': 'جستجو در وظایف...'
+        'Search todos...': 'جستجو در وظایف...',
+        'Add your first todo here!': 'اینجا اولین وظیفه خود را اضافه کنید!',
+        'Filter your todos by status.': 'وظایف خود را بر اساس وضعیت فیلتر کنید.',
+        'Switch between Persian and English.': 'بین فارسی و انگلیسی جابجا شوید.',
+        'Back': 'قبلی',
+        'Close': 'بستن',
+        'Finish': 'پایان',
+        'Next': 'بعدی',
+        'Skip': 'رد کردن'
       }
     }
   },

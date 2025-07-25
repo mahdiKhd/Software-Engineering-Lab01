@@ -4,6 +4,7 @@ import StatsDashboard from './components/StatsDashboard';
 import { loadTodos, saveTodos, exportTodos, importTodos } from './utils/storage';
 import './App.css';
 import { useTranslation } from 'react-i18next';
+import Joyride from 'react-joyride';
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -183,8 +184,36 @@ function App() {
     }
   };
 
+  const [runTour, setRunTour] = useState(true);
+  const tourSteps = [
+    {
+      target: '.input-section',
+      content: t('Add your first todo here!'),
+    },
+    {
+      target: '.filter-section',
+      content: t('Filter your todos by status.'),
+    },
+    {
+      target: '.lang-switcher',
+      content: t('Switch between Persian and English.'),
+    },
+  ];
+
   return (
     <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+      <Joyride
+        steps={tourSteps}
+        run={runTour}
+        continuous
+        showSkipButton
+        showProgress
+        styles={{ options: { zIndex: 10000 } }}
+        locale={{ back: t('Back'), close: t('Close'), last: t('Finish'), next: t('Next'), skip: t('Skip') }}
+        callback={data => {
+          if (data.status === 'finished' || data.status === 'skipped') setRunTour(false);
+        }}
+      />
       <header className="app-header">
         <h1>🔧✨ مدیریت وظایف پیشرفته - نسخه اضطراری</h1>
         <div className="lang-switcher">
