@@ -7,6 +7,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Load todos from localStorage on component mount
   useEffect(() => {
@@ -78,6 +79,13 @@ function App() {
         filtered = todos;
     }
     
+    // Apply search filter
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(todo =>
+        todo.text.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
     // Sort by priority and completion status
     return filtered.sort((a, b) => {
       if (a.completed !== b.completed) {
@@ -123,37 +131,50 @@ function App() {
           </div>
 
           {totalCount > 0 && (
-            <div className="filter-section">
-              <button 
-                onClick={() => setFilter('all')}
-                className={`filter-button ${filter === 'all' ? 'active' : ''}`}
-              >
-                همه ({totalCount})
-              </button>
-              <button 
-                onClick={() => setFilter('active')}
-                className={`filter-button ${filter === 'active' ? 'active' : ''}`}
-              >
-                فعال ({activeCount})
-              </button>
-              <button 
-                onClick={() => setFilter('completed')}
-                className={`filter-button ${filter === 'completed' ? 'active' : ''}`}
-              >
-                تکمیل شده ({completedCount})
-              </button>
-              {completedCount > 0 && (
-                <button onClick={clearCompleted} className="clear-button">
-                  پاک کردن تکمیل شده‌ها
+            <>
+              <div className="search-section">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="جستجو در وظایف..."
+                  className="search-input"
+                />
+              </div>
+              
+              <div className="filter-section">
+                <button 
+                  onClick={() => setFilter('all')}
+                  className={`filter-button ${filter === 'all' ? 'active' : ''}`}
+                >
+                  همه ({totalCount})
                 </button>
-              )}
-            </div>
+                <button 
+                  onClick={() => setFilter('active')}
+                  className={`filter-button ${filter === 'active' ? 'active' : ''}`}
+                >
+                  فعال ({activeCount})
+                </button>
+                <button 
+                  onClick={() => setFilter('completed')}
+                  className={`filter-button ${filter === 'completed' ? 'active' : ''}`}
+                >
+                  تکمیل شده ({completedCount})
+                </button>
+                {completedCount > 0 && (
+                  <button onClick={clearCompleted} className="clear-button">
+                    پاک کردن تکمیل شده‌ها
+                  </button>
+                )}
+              </div>
+            </>
           )}
 
           <div className="todos-list">
             {filteredTodos.length === 0 ? (
               <p className="empty-message">
-                {filter === 'active' && totalCount > 0 
+                {searchTerm ? 'هیچ وظیفه‌ای با این عبارت یافت نشد' :
+                 filter === 'active' && totalCount > 0 
                   ? 'همه وظایف تکمیل شده‌اند! 🎉' 
                   : filter === 'completed' && totalCount > 0
                   ? 'هیچ وظیفه تکمیل شده‌ای وجود ندارد'
