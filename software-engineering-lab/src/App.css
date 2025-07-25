@@ -262,6 +262,21 @@ body {
   color: #6b7280;
 }
 
+.todo-item.overdue {
+  border-left: 4px solid #e53935;
+  background: #fff5f5;
+}
+.overdue-badge {
+  color: #e53935;
+  font-weight: bold;
+  margin-right: 8px;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #ffeaea;
+  font-size: 0.85em;
+}
+
 .todo-content {
   display: flex;
   flex-direction: column;
@@ -448,6 +463,13 @@ body {
   box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
 }
 
+.todo-item[draggable="true"] {
+  cursor: grab;
+}
+.todo-item[draggable="true"]:active {
+  cursor: grabbing;
+}
+
 .todo-meta {
   display: flex;
   justify-content: space-between;
@@ -545,6 +567,25 @@ body {
 
 .import-button:hover {
   background: rgba(59, 130, 246, 0.3);
+}
+
+.undo-button, .redo-button {
+  background: #f3f4f6;
+  border: none;
+  color: #374151;
+  font-size: 1.2em;
+  margin: 0 4px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.undo-button:disabled, .redo-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.undo-button:hover:not(:disabled), .redo-button:hover:not(:disabled) {
+  background: #e0e7ef;
 }
 
 /* Statistics Dashboard */

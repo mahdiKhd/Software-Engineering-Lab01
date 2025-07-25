@@ -23,7 +23,7 @@ jobs:
         
     - name: Install dependencies
       working-directory: ./software-engineering-lab
-      run: npm ci
+      run: npm ci --legacy-peer-deps
       
     - name: Build project
       working-directory: ./software-engineering-lab

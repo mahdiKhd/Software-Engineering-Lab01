@@ -1,10 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import TodoItem from './components/TodoItem';
-import StatsDashboard from './components/StatsDashboard';
+import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { loadTodos, saveTodos, exportTodos, importTodos } from './utils/storage';
 import './App.css';
+import { useTranslation } from 'react-i18next';
+import Joyride from 'react-joyride';
+
+const TodoItem = lazy(() => import('./components/TodoItem'));
+const StatsDashboard = lazy(() => import('./components/StatsDashboard'));
 
 function App() {
+  const { t, i18n } = useTranslation();
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
@@ -12,6 +16,30 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [showStats, setShowStats] = useState(false);
   const fileInputRef = useRef(null);
+  const [dueDate, setDueDate] = useState('');
+
+  // Drag and drop state
+  const [draggedTodoId, setDraggedTodoId] = useState(null);
+
+  const handleDragStart = (id) => {
+    setDraggedTodoId(id);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (id) => {
+    if (draggedTodoId === null || draggedTodoId === id) return;
+    const draggedIndex = todos.findIndex(todo => todo.id === draggedTodoId);
+    const dropIndex = todos.findIndex(todo => todo.id === id);
+    if (draggedIndex === -1 || dropIndex === -1) return;
+    const updatedTodos = [...todos];
+    const [removed] = updatedTodos.splice(draggedIndex, 1);
+    updatedTodos.splice(dropIndex, 0, removed);
+    setTodos(updatedTodos);
+    setDraggedTodoId(null);
+  };
 
   // Load todos from localStorage on component mount
   useEffect(() => {
@@ -40,43 +68,75 @@ function App() {
     }
   }, [darkMode]);
 
+  const [history, setHistory] = useState([]);
+  const [future, setFuture] = useState([]);
+
+  const pushToHistory = (newTodos) => {
+    setHistory(prev => [...prev, todos]);
+    setFuture([]);
+  };
+
+  const undo = () => {
+    if (history.length === 0) return;
+    const prevTodos = history[history.length - 1];
+    setHistory(history.slice(0, -1));
+    setFuture(f => [todos, ...f]);
+    setTodos(prevTodos);
+  };
+
+  const redo = () => {
+    if (future.length === 0) return;
+    const nextTodos = future[0];
+    setFuture(future.slice(1));
+    setHistory(h => [...h, todos]);
+    setTodos(nextTodos);
+  };
+
   const addTodo = () => {
     if (inputValue.trim() !== '') {
+      pushToHistory();
       const newTodo = {
         id: Date.now(),
         text: inputValue.trim(),
         completed: false,
         priority: 'medium', // 'high', 'medium', 'low'
-        createdAt: new Date().toLocaleDateString('fa-IR')
+        createdAt: new Date().toLocaleDateString('fa-IR'),
+        dueDate: dueDate || null
       };
       setTodos([...todos, newTodo]);
       setInputValue('');
+      setDueDate('');
     }
   };
 
   const toggleTodo = (id) => {
+    pushToHistory();
     setTodos(todos.map(todo => 
       todo.id === id ? { ...todo, completed: !todo.completed } : todo
     ));
   };
 
   const deleteTodo = (id) => {
+    pushToHistory();
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
-  const editTodo = (id, newText) => {
+  const editTodo = (id, newText, newDueDate) => {
+    pushToHistory();
     setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, text: newText } : todo
+      todo.id === id ? { ...todo, text: newText, dueDate: newDueDate !== undefined ? newDueDate : todo.dueDate } : todo
     ));
   };
 
   const changePriority = (id, newPriority) => {
+    pushToHistory();
     setTodos(todos.map(todo =>
       todo.id === id ? { ...todo, priority: newPriority } : todo
     ));
   };
 
   const clearCompleted = () => {
+    pushToHistory();
     setTodos(todos.filter(todo => !todo.completed));
   };
 
@@ -155,15 +215,49 @@ function App() {
     }
   };
 
+  const [runTour, setRunTour] = useState(true);
+  const tourSteps = [
+    {
+      target: '.input-section',
+      content: t('Add your first todo here!'),
+    },
+    {
+      target: '.filter-section',
+      content: t('Filter your todos by status.'),
+    },
+    {
+      target: '.lang-switcher',
+      content: t('Switch between Persian and English.'),
+    },
+  ];
+
   return (
-    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`} role="main" aria-label="Todo Application">
+      <Joyride
+        steps={tourSteps}
+        run={runTour}
+        continuous
+        showSkipButton
+        showProgress
+        styles={{ options: { zIndex: 10000 } }}
+        locale={{ back: t('Back'), close: t('Close'), last: t('Finish'), next: t('Next'), skip: t('Skip') }}
+        callback={data => {
+          if (data.status === 'finished' || data.status === 'skipped') setRunTour(false);
+        }}
+      />
       <header className="app-header">
         <h1>🔧✨ مدیریت وظایف پیشرفته - نسخه اضطراری</h1>
+        <div className="lang-switcher">
+          <button onClick={() => i18n.changeLanguage('fa')}>FA</button>
+          <button onClick={() => i18n.changeLanguage('en')}>EN</button>
+        </div>
         <p>برنامه مدیریت وظایف شخصی - با ذخیره‌سازی خودکار - پریمیوم و بهبود یافته</p>
         <div className="combined-notice">
           🌟 نسخه پریمیوم با رفع باگ‌های فوری ⚠️
         </div>
         <div className="header-controls">
+          <button onClick={undo} className="undo-button" disabled={history.length === 0} title="Undo">↩️</button>
+          <button onClick={redo} className="redo-button" disabled={future.length === 0} title="Redo">↪️</button>
           <button 
             onClick={() => setDarkMode(!darkMode)}
             className="dark-mode-toggle"
@@ -205,11 +299,13 @@ function App() {
       
       <main className="app-main">
         <div className="todo-container">
-          <StatsDashboard 
-            todos={todos} 
-            isVisible={showStats} 
-            onToggle={() => setShowStats(false)} 
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <StatsDashboard 
+              todos={todos} 
+              isVisible={showStats} 
+              onToggle={() => setShowStats(false)} 
+            />
+          </Suspense>
           
           <div className="input-section">
             <input 
@@ -217,10 +313,19 @@ function App() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="وظیفه جدید اضافه کنید..."
+              placeholder={t('Add a new todo...')}
               className="todo-input"
+              aria-label={t('Add a new todo...')}
             />
-            <button onClick={addTodo} className="add-button">افزودن</button>
+            <input
+              type="date"
+              value={dueDate}
+              onChange={e => setDueDate(e.target.value)}
+              className="due-date-input"
+              placeholder={t('Due')}
+              aria-label={t('Due')}
+            />
+            <button onClick={addTodo} className="add-button" aria-label={t('Add')}>{t('Add')}</button>
           </div>
 
           {totalCount > 0 && (
@@ -230,33 +335,39 @@ function App() {
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="جستجو در وظایف..."
+                  placeholder={t('Search todos...')}
                   className="search-input"
                 />
               </div>
               
-              <div className="filter-section">
+              <div className="filter-section" role="group" aria-label="Filter Todos">
                 <button 
                   onClick={() => setFilter('all')}
                   className={`filter-button ${filter === 'all' ? 'active' : ''}`}
+                  aria-pressed={filter === 'all'}
+                  tabIndex={0}
                 >
-                  همه ({totalCount})
+                  {t('All')} ({totalCount})
                 </button>
                 <button 
                   onClick={() => setFilter('active')}
                   className={`filter-button ${filter === 'active' ? 'active' : ''}`}
+                  aria-pressed={filter === 'active'}
+                  tabIndex={0}
                 >
-                  فعال ({activeCount})
+                  {t('Active')} ({activeCount})
                 </button>
                 <button 
                   onClick={() => setFilter('completed')}
                   className={`filter-button ${filter === 'completed' ? 'active' : ''}`}
+                  aria-pressed={filter === 'completed'}
+                  tabIndex={0}
                 >
-                  تکمیل شده ({completedCount})
+                  {t('Completed')} ({completedCount})
                 </button>
                 {completedCount > 0 && (
-                  <button onClick={clearCompleted} className="clear-button">
-                    پاک کردن تکمیل شده‌ها
+                  <button onClick={clearCompleted} className="clear-button" aria-label={t('Clear completed')} tabIndex={0}>
+                    {t('Clear completed')}
                   </button>
                 )}
               </div>
@@ -276,14 +387,23 @@ function App() {
               </p>
             ) : (
               filteredTodos.map((todo) => (
-                <TodoItem 
-                  key={todo.id} 
-                  todo={todo} 
-                  onToggle={toggleTodo}
-                  onDelete={deleteTodo}
-                  onEdit={editTodo}
-                  onPriorityChange={changePriority}
-                />
+                <div
+                  key={todo.id}
+                  draggable
+                  onDragStart={() => handleDragStart(todo.id)}
+                  onDragOver={handleDragOver}
+                  onDrop={() => handleDrop(todo.id)}
+                >
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <TodoItem 
+                      todo={todo} 
+                      onToggle={toggleTodo}
+                      onDelete={deleteTodo}
+                      onEdit={(id, newText, newDueDate) => editTodo(id, newText, newDueDate)}
+                      onPriorityChange={changePriority}
+                    />
+                  </Suspense>
+                </div>
               ))
             )}
           </div>

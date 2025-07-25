@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# Software Engineering Lab - React Todo App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+A modern, feature-rich React Todo application with advanced features, accessibility, and internationalization.
 
-## Available Scripts
+## Features
+- Add, edit, delete, and complete todos
+- Due dates and overdue notifications
+- Drag-and-drop reordering
+- Priority system
+- Filtering and search
+- Bulk actions
+- LocalStorage persistence
+- Inline editing
+- Undo/redo actions
+- Responsive design
+- Dark mode
+- Multi-language (FA/EN)
+- User onboarding tour
+- Accessibility (ARIA, keyboard navigation)
+- Integration tests
 
-In the project directory, you can run:
+## Getting Started
 
-### `npm start`
+### Installation
+```bash
+cd software-engineering-lab
+npm install
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Running the App
+```bash
+npm start
+```
+The app will be available at [http://localhost:3000](http://localhost:3000).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Running Tests
+```bash
+npm test
+```
 
-### `npm test`
+## Usage Examples
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Add a Todo:** Type in the input and press Enter or click Add.
+- **Set Due Date:** Use the date picker next to the input.
+- **Mark Complete:** Click the circle next to a todo.
+- **Edit:** Double-click a todo or click the pencil icon.
+- **Delete:** Click the trash icon.
+- **Reorder:** Drag and drop todos.
+- **Undo/Redo:** Use the ↩️ and ↪️ buttons in the header.
+- **Switch Language:** Use the FA/EN buttons in the header.
+- **View Stats:** Click the 📊 button.
+- **Bulk Actions:** Use filter and clear completed.
 
-### `npm run build`
+## Main Components API
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `<App />`
+- Root component. Manages state, persistence, and UI logic.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `<TodoItem />`
+- Props:
+  - `todo`: Todo object
+  - `onToggle(id)`
+  - `onDelete(id)`
+  - `onEdit(id, newText, newDueDate)`
+  - `onPriorityChange(id, newPriority)`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### `<StatsDashboard />`
+- Props:
+  - `todos`: Array of todos
+  - `isVisible`: Boolean
+  - `onToggle()`: Show/hide stats
 
-### `npm run eject`
+## Accessibility
+- All controls are keyboard accessible
+- ARIA roles and labels are provided
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Internationalization
+- Uses `react-i18next` for FA/EN support
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+MIT
