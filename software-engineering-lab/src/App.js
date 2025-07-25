@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TodoItem from './components/TodoItem';
 import './App.css';
 
 function App() {
@@ -66,26 +67,12 @@ function App() {
               <p className="empty-message">هنوز هیچ وظیفه‌ای اضافه نشده است</p>
             ) : (
               todos.map((todo) => (
-                <div key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
-                  <div className="todo-content">
-                    <span className="todo-text">{todo.text}</span>
-                    <small className="todo-date">ایجاد شده در: {todo.createdAt}</small>
-                  </div>
-                  <div className="todo-actions">
-                    <button 
-                      onClick={() => toggleTodo(todo.id)}
-                      className={`toggle-button ${todo.completed ? 'completed' : ''}`}
-                    >
-                      {todo.completed ? '✓' : '○'}
-                    </button>
-                    <button 
-                      onClick={() => deleteTodo(todo.id)}
-                      className="delete-button"
-                    >
-                      🗑️
-                    </button>
-                  </div>
-                </div>
+                <TodoItem 
+                  key={todo.id} 
+                  todo={todo} 
+                  onToggle={toggleTodo}
+                  onDelete={deleteTodo}
+                />
               ))
             )}
           </div>
