@@ -71,10 +71,10 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <h1>✨ مدیریت وظایف پیشرفته</h1>
-        <p>برنامه مدیریت وظایف شخصی - با ذخیره‌سازی خودکار - نسخه پریمیوم</p>
-        <div className="premium-badge">
-          🌟 نسخه پریمیوم با قابلیت‌های پیشرفته
+        <h1>🔧✨ مدیریت وظایف پیشرفته - نسخه اضطراری</h1>
+        <p>برنامه مدیریت وظایف شخصی - با ذخیره‌سازی خودکار - پریمیوم و بهبود یافته</p>
+        <div className="combined-notice">
+          🌟 نسخه پریمیوم با رفع باگ‌های فوری ⚠️
         </div>
         {totalCount > 0 && (
           <div className="stats">
