@@ -120,3 +120,20 @@ body {
   transform: translateX(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
+.todo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.todo-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.todo-date {
+  color: #718096;
+  font-size: 0.8rem;
+}
